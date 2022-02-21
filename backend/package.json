@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "googleapis": "^95.0.0",
+    "request": "^2.88.2",
     "ws": "^8.5.0"
   }
 }

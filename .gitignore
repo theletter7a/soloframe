@@ -1,4 +1,4 @@
-/node_modules
-package-lock.json
-credentials.json
-token.json
+backend/node_modules
+backend/package-lock.json
+backend/credentials.json
+backend/token.json
