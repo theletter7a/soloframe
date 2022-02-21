@@ -13,21 +13,22 @@ var site = JSON.parse(fs.readFileSync('site_config.json', {encoding: 'utf-8'}));
 var wss = new WebSocketServer({port: 8080});
 
 wss.on('connection', ws=>{
-    ws.on('message', m=>{
-        var obj = JSON.parse(m.toString());
-        var date = new Date();
-        var formatter = new Intl.DateTimeFormat('en-US', { timeZone: "America/New_York" });   
-        var res = {};
-        var usDate = formatter.format(date);
-        if(obj.date!=site.lastreq){
-            site.lastreq = usDate.split('/')[1];
-            fm.config(JSON.stringify(site));
-            getGoogle(b=>{
-                res.name = site.today, res.data = b;
-                ws.send(JSON.stringify(res));
-            })
-        }
-    })
+    var date = new Date();
+    var formatter = new Intl.DateTimeFormat('en-US', { timeZone: "America/New_York" });   
+    var usDate = formatter.format(date);
+    var res = {};
+    if(usDate.split('/')[1]!=site.lastreq){
+        site.lastreq = usDate.split('/')[1];
+        fm.config(JSON.stringify(site));
+        getGoogle(b=>{
+            res.name = site.today, res.data = b;
+            ws.send(JSON.stringify(res));
+        })
+    }
+    else{
+        res.name = site.today, res.data = b64.getImage(site.today);
+        ws.send(JSON.stringify(res));
+    }
 })
 
 function getGoogle(_callback){
