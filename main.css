@@ -10,7 +10,8 @@ body{
     font-family: sans-serif;
 }
 #frame{
-    max-width: 700px;
+    max-width: 50vw;
+    max-height: 75vh;
     margin-bottom: 10px;
 }
 #label{
