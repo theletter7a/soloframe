@@ -76,17 +76,18 @@ function getGoogle(_callback){
         drive.files.list({
             pageSize: 10,
             fields: 'nextPageToken, files(id, name, webContentLink, webViewLink)',
-            q: "'"+site.folder+"' in parents and trashed = false"
+            q: "'"+site.folder+"' in parents and trashed = false and mimeType != 'application/vnd.google-apps.folder'"
         }, (err, res) => {
             if (err) return console.log('The API returned an error: ' + err);
-              const files = res.data.files;
-              var rand = Math.floor(Math.random() * files.length);
-              site.today = files[rand].name;
-              fm.download(files[rand], auth, ()=>{
-                site.today = files[rand].name;
+            const files = res.data.files;
+            var rand = Math.floor(Math.random() * files.length);
+            site.id = files[rand].id;
+            site.today = files[rand].name;
+            drive.files.update({fileId: site.id, addParents: site.used});
+            fm.download(files[rand], auth, ()=>{
                 _callback(b64.getImage(site.today));
-              });
-              fm.config(JSON.stringify(site));
+                });
+            fm.config(JSON.stringify(site));
         });
     }
 }
