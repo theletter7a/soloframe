@@ -4,13 +4,19 @@ const {WebSocketServer} = require('ws');
 const {google} = require('googleapis');
 const fm = require('./lib/filemanager');
 const b64 = require('./lib/base64');
+const http = require('http');
 
 const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = './token.json';
 
 var site = JSON.parse(fs.readFileSync('site_config.json', {encoding: 'utf-8'}));
 
-var wss = new WebSocketServer({port: 8080});
+var server = http.createServer(function (req, res) {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end();
+}).listen(8080);
+  
+var wss = new WebSocketServer({server: server});
 
 wss.on('connection', ws=>{
     var date = new Date();
